@@ -17,13 +17,13 @@
     }
 
     body {
-        @apply font-sans;
+        @apply font-sans text-brand-900;
     }
 }
 
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center justify-center px-8 py-4 bg-brand-700 text-white rounded-full font-medium transition-all duration-300 hover:bg-brand-800 hover:shadow-xl hover:scale-105 active:scale-95;
+        @apply inline-flex items-center justify-center px-8 py-4 bg-brand-500 text-white rounded-full font-medium transition-all duration-300 hover:bg-brand-600 hover:shadow-xl hover:scale-105 active:scale-95;
     }
 
     .btn-outline {

@@ -21,7 +21,14 @@ import {
     ChevronDown,
     Scale,
     Activity,
-    ArrowUp
+    ArrowUp,
+    Moon,
+    Zap,
+    TrendingDown,
+    Waves,
+    Ban,
+    Home,
+    Star
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -40,10 +47,15 @@ const Navbar = () => {
     }, [])
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm py-4' : 'bg-transparent py-6'}`}>
+        <nav className={`fixed w-full z-50 transition-all duration-300 ${isMobileMenuOpen
+            ? 'bg-white z-[70]'
+            : isScrolled
+                ? 'bg-white/80 backdrop-blur-lg shadow-sm py-4'
+                : 'bg-transparent py-6'
+            }`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-brand-700 rounded-full flex items-center justify-center text-white">
+                    <div className="w-10 h-10 bg-brand-50 rounded-full flex items-center justify-center text-brand-900 border border-brand-100/50 shadow-sm">
                         <Heart className="w-6 h-6" />
                     </div>
                     <div>
@@ -55,10 +67,11 @@ const Navbar = () => {
                 {/* Desktop Menu */}
                 <div className={`hidden md:flex items-center gap-8 text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
                     <a href="#inicio" className="hover:text-brand-700 transition-colors">Início</a>
+                    <a href="#sinais" className="hover:text-brand-700 transition-colors">Sinais</a>
+                    <a href="#servicos" className="hover:text-brand-700 transition-colors">Diferenciais</a>
+                    <a href="#resultados" className="hover:text-brand-700 transition-colors">Resultados</a>
                     <a href="#sobre" className="hover:text-brand-700 transition-colors">Sobre</a>
-                    <a href="#servicos" className="hover:text-brand-700 transition-colors">Serviços</a>
-                    <a href="#lipedema" className="hover:text-brand-700 transition-colors">Lipedema</a>
-                    <a href="#contato" className="btn-primary py-2.5 px-6 !text-sm">Agendar Consulta</a>
+                    <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="btn-primary py-2.5 px-6 !text-sm">Agendar Consulta</a>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -67,21 +80,90 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-b overflow-hidden"
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className="fixed inset-0 z-[60] bg-white md:hidden overflow-y-auto flex flex-col"
                     >
-                        <div className="flex flex-col p-6 gap-4 text-brand-900 font-medium">
-                            <a href="#inicio" onClick={() => setIsMobileMenuOpen(false)}>Início</a>
-                            <a href="#sobre" onClick={() => setIsMobileMenuOpen(false)}>Sobre</a>
-                            <a href="#servicos" onClick={() => setIsMobileMenuOpen(false)}>Serviços</a>
-                            <a href="#lipedema" onClick={() => setIsMobileMenuOpen(false)}>Lipedema</a>
-                            <a href="#contato" className="btn-primary" onClick={() => setIsMobileMenuOpen(false)}>Agendar Agora</a>
+                        {/* Mobile Menu Header */}
+                        <div className="flex justify-between items-center px-6 py-5 border-b border-brand-100 bg-white sticky top-0 z-10">
+                            <div className="flex items-center gap-2">
+                                <div className="w-10 h-10 bg-brand-50 rounded-full flex items-center justify-center text-brand-900 border border-brand-100">
+                                    <Heart className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <span className="text-lg font-bold text-brand-900 tracking-tight leading-none block">Dra. Ananda Paris</span>
+                                    <span className="text-[8px] uppercase tracking-widest font-bold text-brand-500">Nutrologia & Clínica Médica</span>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="p-3 rounded-2xl bg-brand-50 text-brand-900 active:scale-90 transition-transform"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Mobile Menu Links */}
+                        <div className="px-6 py-10 flex flex-col gap-3">
+                            {[
+                                { label: 'Início', href: '#inicio', icon: Home },
+                                { label: 'Sinais', href: '#sinais', icon: Activity },
+                                { label: 'Diferenciais', href: '#servicos', icon: Stethoscope },
+                                { label: 'Resultados', href: '#resultados', icon: Star },
+                                { label: 'Sobre', href: '#sobre', icon: User },
+                            ].map((item, idx) => (
+                                <motion.a
+                                    key={item.label}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.1 + idx * 0.1 }}
+                                    href={item.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="flex items-center gap-4 p-4 rounded-[2rem] bg-brand-50/50 border border-brand-100/30 text-brand-900 text-lg font-serif group active:bg-brand-700 active:text-white transition-all shadow-sm active:shadow-none"
+                                >
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm group-active:bg-brand-600 transition-colors">
+                                        <item.icon className="w-6 h-6 text-brand-700 group-active:text-white transition-colors" />
+                                    </div>
+                                    <span className="font-medium tracking-tight">{item.label}</span>
+                                    <ChevronRight className="ml-auto w-5 h-5 opacity-20" />
+                                </motion.a>
+                            ))}
+
+                            <motion.a
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.7 }}
+                                href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-primary mt-6 py-5 text-lg shadow-xl shadow-brand-700/20 active:scale-95 transition-all"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <MessageSquare className="mr-3 w-6 h-6" />
+                                Agendar Consulta
+                            </motion.a>
+                        </div>
+
+                        {/* Social & Contact Footer */}
+                        <div className="mt-auto px-6 py-10 bg-brand-50/30 border-t border-brand-100/50 flex flex-col items-center gap-6">
+                            <div className="flex gap-4">
+                                <a href="https://instagram.com/dra.anandaparis" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-white border border-brand-100 rounded-2xl flex items-center justify-center text-brand-700 shadow-sm active:scale-95 transition-all">
+                                    <Instagram className="w-7 h-7" />
+                                </a>
+                                <a href="https://wa.me/5511999488449" className="w-14 h-14 bg-white border border-brand-100 rounded-2xl flex items-center justify-center text-brand-700 shadow-sm active:scale-95 transition-all">
+                                    <Phone className="w-7 h-7" />
+                                </a>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-[9px] uppercase tracking-[0.3em] text-brand-900/50 font-bold mb-1">Localização</p>
+                                <p className="text-xs text-brand-900/70 font-medium">Moema, São Paulo • SP</p>
+                            </div>
                         </div>
                     </motion.div>
                 )}
@@ -119,9 +201,9 @@ const Hero = () => {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-3 px-5 py-2.5 bg-brand-800/50 backdrop-blur-md border border-white/10 text-brand-100 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-10 shadow-xl"
+                            className="inline-flex items-center gap-3 px-5 py-2.5 bg-white/5 backdrop-blur-md border border-brand-300/30 text-brand-200 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-10 shadow-2xl"
                         >
-                            <span className="flex h-2 w-2 rounded-full bg-brand-400 animate-pulse" />
+                            <span className="flex h-2 w-2 rounded-full bg-brand-300 animate-pulse" />
                             CRM-SP 187387 | RQE 116808
                         </motion.div>
 
@@ -150,7 +232,7 @@ const Hero = () => {
                             transition={{ delay: 0.6 }}
                             className="flex flex-col sm:flex-row gap-6 mb-20"
                         >
-                            <a href="https://wa.me/5511999488449" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !py-6 !px-12 text-xl shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)] group flex items-center justify-center">
+                            <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !py-6 !px-12 text-xl shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)] group flex items-center justify-center">
                                 Agendar Minha Avaliação
                                 <ArrowRight className="ml-3 w-7 h-7 transition-transform group-hover:translate-x-2" />
                             </a>
@@ -202,16 +284,16 @@ const ServiceCard = ({ title, icon: Icon, description, items }: any) => (
             <Icon className="w-8 h-8" />
         </div>
         <h3 className="text-2xl font-serif text-brand-900 mb-4">{title}</h3>
-        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+        <p className="text-brand-900/70 mb-6 leading-relaxed">{description}</p>
         <ul className="space-y-3 mb-8">
             {items.map((item: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-500">
+                <li key={i} className="flex items-start gap-2 text-sm text-brand-900/60">
                     <CheckCircle2 className="w-4 h-4 text-brand-400 mt-1 shrink-0" />
                     {item}
                 </li>
             ))}
         </ul>
-        <a href="https://wa.me/5511999488449" className="text-brand-700 font-bold flex items-center gap-2 group">
+        <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="text-brand-700 font-bold flex items-center gap-2 group">
             Saber Mais
             <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
         </a>
@@ -241,7 +323,7 @@ const Testimonials = () => {
     ]
 
     return (
-        <section className="section-padding bg-brand-50 overflow-hidden">
+        <section id="resultados" className="section-padding bg-brand-50 overflow-hidden">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
                     <span className="text-brand-700 font-bold uppercase tracking-widest text-sm block mb-4">Experiências Reais</span>
@@ -265,14 +347,14 @@ const Testimonials = () => {
                                         </div>
                                     ))}
                                 </div>
-                                <p className="text-gray-600 italic mb-8 leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+                                <p className="text-brand-900/70 italic mb-8 leading-relaxed">&ldquo;{review.text}&rdquo;</p>
                             </div>
                             <div className="flex items-center justify-between border-t border-brand-50 pt-6">
                                 <div>
                                     <h4 className="font-bold text-brand-900">{review.name}</h4>
                                     <p className="text-xs text-brand-500 uppercase tracking-tighter">{review.type}</p>
                                 </div>
-                                <span className="text-[10px] text-gray-400 font-medium">{review.date}</span>
+                                <span className="text-[10px] text-brand-900/40 font-medium">{review.date}</span>
                             </div>
                         </motion.div>
                     ))}
@@ -305,7 +387,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                     >
-                        <p className="text-gray-600 pb-8 leading-relaxed max-w-4xl">
+                        <p className="text-brand-900/70 pb-8 leading-relaxed max-w-4xl">
                             {answer}
                         </p>
                     </motion.div>
@@ -342,10 +424,10 @@ const FAQ = () => {
                     <div className="lg:col-span-4">
                         <span className="text-brand-700 font-bold uppercase tracking-widest text-sm block mb-4">Dúvidas Comuns</span>
                         <h2 className="text-4xl md:text-5xl font-serif text-brand-900 leading-tight">Perguntas Frequentes (FAQ)</h2>
-                        <p className="mt-6 text-gray-600 leading-relaxed">
+                        <p className="mt-6 text-brand-900/70 leading-relaxed">
                             Tem alguma dúvida específica não listada aqui? Sinta-se à vontade para nos chamar diretamente no canal de agendamento.
                         </p>
-                        <a href="https://wa.me/5511999488449" className="mt-8 inline-flex items-center text-brand-700 font-bold border-b-2 border-brand-700 pb-1 hover:text-brand-900 hover:border-brand-900 transition-all">
+                        <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center text-brand-700 font-bold border-b-2 border-brand-700 pb-1 hover:text-brand-900 hover:border-brand-900 transition-all">
                             Falar com a equipe agora
                         </a>
                     </div>
@@ -378,39 +460,87 @@ const App = () => {
             <Navbar />
             <Hero />
 
-            {/* Symptoms Section */}
-            <section className="section-padding bg-white relative overflow-hidden">
+            {/* Clinical Signals Section */}
+            <section id="sinais" className="py-32 bg-white relative overflow-hidden">
                 <div className="container mx-auto px-6">
-                    <div className="max-w-3xl mx-auto text-center mb-16">
+                    <div className="max-w-4xl mx-auto text-center mb-20">
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            className="text-brand-400 font-bold uppercase tracking-[0.3em] text-[10px] block mb-4"
+                        >
+                            Avaliação Clínica
+                        </motion.span>
                         <h2 className="text-4xl md:text-5xl font-serif text-brand-900 mb-6">
-                            O emagrecer virou uma batalha?
+                            Sinais Clínicos e Relevância Médica
                         </h2>
-                        <p className="text-lg text-gray-600">
-                            Sinais que indicam desequilíbrios nutricionais e metabólicos que requerem avaliação médica individualizada.
+                        <p className="text-xl text-brand-700/60 font-serif italic">
+                            Você apresenta algum destes sintomas?
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                         {[
-                            "Ganho de peso resistente",
-                            "Inchaços e sensibilidade nas pernas",
-                            "Irritabilidade, insônia ou cansaço",
-                            "Mente acelerada e ansiedade",
-                            "Queda de rendimento físico",
-                            "Sintomas de desequilíbrio hormonal"
-                        ].map((symptom, i) => (
+                            {
+                                text: "Ganho de peso resistente, mesmo com dieta e treino.",
+                                icon: Scale,
+                                delay: 0.1
+                            },
+                            {
+                                text: "Inchaços, dores e sensibilidade nas pernas (possível lipedema).",
+                                icon: Waves,
+                                delay: 0.2
+                            },
+                            {
+                                text: "Irritabilidade, insônia ou falta de libido.",
+                                icon: Moon,
+                                delay: 0.3
+                            },
+                            {
+                                text: "Cansaço persistente, mente acelerada ou ansiedade.",
+                                icon: Zap,
+                                delay: 0.4
+                            },
+                            {
+                                text: "Queda de rendimento físico e mental.",
+                                icon: TrendingDown,
+                                delay: 0.5
+                            },
+                            {
+                                text: "Dificuldade de resposta com dietas comuns ou efeito sanfona.",
+                                icon: Ban,
+                                delay: 0.6
+                            },
+                            {
+                                text: "Sintomas de desequilíbrio hormonal sem explicação aparente.",
+                                icon: Dna,
+                                delay: 0.7
+                            }
+                        ].map((item, i) => (
                             <motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex items-center gap-4 p-6 bg-brand-50 rounded-2xl border border-brand-100"
+                                transition={{ delay: item.delay }}
+                                className="group flex items-start gap-4 p-8 rounded-3xl border border-brand-100 bg-brand-50/40 transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
                             >
-                                <div className="w-3 h-3 bg-brand-400 rounded-full" />
-                                <span className="font-medium text-brand-800">{symptom}</span>
+                                <div className="p-3 rounded-2xl bg-white shadow-sm group-hover:bg-brand-700 group-hover:text-white transition-all duration-500">
+                                    <item.icon className="w-6 h-6" />
+                                </div>
+                                <span className="text-brand-900 font-medium leading-relaxed">{item.text}</span>
                             </motion.div>
                         ))}
                     </div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="mt-20 max-w-2xl mx-auto text-center"
+                    >
+                        <p className="text-lg text-brand-900/60 leading-relaxed border-t border-brand-100 pt-10 px-6">
+                            Esses sinais podem indicar desequilíbrios nutricionais e metabólicos que requerem <strong className="text-brand-900">avaliação médica individualizada</strong>.
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
@@ -441,7 +571,7 @@ const App = () => {
                                 title: 'Perda de peso com estratégia médica personalizada',
                                 desc: 'Uso clínico de medicamentos como Mounjaro, exames de composição corporal (bioimpedância) e plano combinado com nutricionista. Indicado para quem quer perder peso com responsabilidade, sem efeito rebote.',
                                 icon: Scale,
-                                img: '/servico-emagrecimento.png',
+                                img: '/servico-emagrecimento-v3.png',
                                 badge: 'Foco Metabólico'
                             },
                             {
@@ -450,7 +580,7 @@ const App = () => {
                                 subtitle: '(com ou sem implantes)',
                                 desc: 'Avaliação completa para entender seu perfil hormonal e indicar o melhor tratamento — com foco em saúde, longevidade e bem-estar emocional.',
                                 icon: Dna,
-                                img: '/servico-hormonal.png',
+                                img: '/servico-hormonal-v3.png',
                                 badge: 'Saúde & Longevidade'
                             },
                             {
@@ -458,7 +588,7 @@ const App = () => {
                                 title: 'Tratamento de Lipedema',
                                 desc: 'Abordagem clínica para controlar dor, inchaço e progressão da condição. Tratamento humanizado, com atenção à estética, à saúde vascular e à qualidade de vida.',
                                 icon: Activity,
-                                img: '/servico-lipedema.png',
+                                img: '/servico-lipedema-v3.png',
                                 badge: 'Cuidado Humanizado'
                             },
                             {
@@ -466,7 +596,7 @@ const App = () => {
                                 title: 'Injetáveis (vitaminas e ativos)',
                                 desc: 'Aplicações com foco em imunidade, energia, metabolismo e saúde da pele, de forma prática e eficaz.',
                                 icon: Syringe,
-                                img: '/servico-injetaveis.png',
+                                img: '/servico-injetaveis-v3.png',
                                 badge: 'Bem-estar Prático'
                             },
                             {
@@ -474,7 +604,7 @@ const App = () => {
                                 title: 'Avaliações clínicas detalhadas',
                                 desc: 'Consulta com escuta ativa, anamnese aprofundada e planejamento individualizado.',
                                 icon: Stethoscope,
-                                img: '/servico-avaliação.png',
+                                img: '/servico-avaliacao-v3.png',
                                 badge: 'Escuta Ativa'
                             }
                         ];
@@ -520,7 +650,7 @@ const App = () => {
                                     ))}
 
                                     <div className="pt-8">
-                                        <a href="https://wa.me/5511999488449" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !py-6 !px-12 text-xl shadow-2xl flex items-center justify-center sm:inline-flex">
+                                        <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !py-6 !px-12 text-xl shadow-2xl flex items-center justify-center sm:inline-flex">
                                             Agendar Minha Consulta
                                             <ArrowRight className="ml-3 w-7 h-7" />
                                         </a>
@@ -571,37 +701,93 @@ const App = () => {
 
             <Testimonials />
 
-            {/* About Section */}
-            <section id="sobre" className="section-padding bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                        <div className="order-2 lg:order-1 relative group">
-                            {/* Decorative Elements */}
-                            <div className="absolute -top-6 -left-6 border-[12px] border-brand-50 w-full h-full rounded-3xl -z-10 transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2" />
-                            <div className="absolute -bottom-6 -right-6 bg-brand-100/50 w-full h-full rounded-3xl -z-20 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2" />
+            {/* Refined About Section */}
+            <section id="sobre" className="py-32 bg-white relative overflow-hidden">
+                {/* Decorative background element */}
+                <div className="absolute top-0 right-0 w-1/3 h-full bg-brand-50/30 -z-10 skew-x-[-12deg] translate-x-20" />
 
-                            <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                                <img
-                                    src="/dra-ananda-about.png"
-                                    alt="Dra. Ananda Paris"
-                                    className="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
-                                />
-                                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/20 to-transparent" />
-                            </div>
+                <div className="container mx-auto px-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+                        {/* Image Column */}
+                        <div className="lg:col-span-5 relative group">
+                            <motion.div
+                                initial={{ opacity: 0, x: -30 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 1 }}
+                                className="relative z-10"
+                            >
+                                {/* Luxury Frames */}
+                                <div className="absolute -top-8 -left-8 w-32 h-32 border-l-2 border-t-2 border-brand-200 rounded-tl-[3rem] -z-10" />
+                                <div className="absolute -bottom-8 -right-8 w-32 h-32 border-r-2 border-b-2 border-brand-200 rounded-br-[3rem] -z-10" />
+
+                                <div className="relative overflow-hidden rounded-[4rem] shadow-[0_40px_100px_-15px_rgba(45,27,21,0.2)] aspect-[4/5]">
+                                    <motion.img
+                                        initial={{ scale: 1.1 }}
+                                        whileInView={{ scale: 1 }}
+                                        transition={{ duration: 1.5 }}
+                                        src="/dra-ananda-about-v2.jpg"
+                                        alt="Dra. Ananda Paris"
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-brand-900/40 to-transparent opacity-60" />
+                                </div>
+
+                                {/* Floating Experience Card */}
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="absolute -bottom-10 -left-10 bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-white max-w-[200px] hidden sm:block"
+                                >
+                                    <p className="text-4xl font-serif text-brand-700 mb-1">10+</p>
+                                    <p className="text-[10px] uppercase tracking-widest font-bold text-brand-900/50 leading-tight">Anos de dedicação à medicina</p>
+                                </motion.div>
+                            </motion.div>
                         </div>
-                        <div className="order-1 lg:order-2">
-                            <h2 className="text-4xl md:text-5xl font-serif text-brand-900 mb-8">Conheça a Dra. Ananda</h2>
-                            <div className="prose prose-lg text-gray-600 max-w-none space-y-6">
-                                <p>
-                                    Sou médica formada em 2015, com residência em Clínica Médica e pós-graduação em Nutrologia. Natural de Vitória (ES), vivo em São Paulo há 8 anos, onde construí minha trajetória com foco no atendimento de mulheres reais.
-                                </p>
-                                <p>
-                                    Depois de atuar em prontos-socorros e UTIs, encontrei na nutrologia o espaço para aplicar a medicina como acredito: com escuta, proximidade e autonomia para o paciente.
-                                </p>
-                                <p className="font-serif italic text-brand-700 text-xl">
-                                    &ldquo;A medicina que acredito une ciência, escuta ativa e um olhar atento para quem está por trás dos sintomas.&rdquo;
-                                </p>
-                            </div>
+
+                        {/* Text Column */}
+                        <div className="lg:col-span-7">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                            >
+                                <span className="text-brand-400 font-bold uppercase tracking-[0.4em] text-[10px] block mb-6">Trajetória & Propósito</span>
+                                <h2 className="text-5xl md:text-6xl font-serif text-brand-900 mb-8 leading-tight">
+                                    Conheça a Dra. Ananda Paris
+                                </h2>
+
+                                <div className="space-y-8 text-lg text-brand-900/70 leading-relaxed">
+                                    <p className="font-serif italic text-2xl text-brand-800/80 leading-snug">
+                                        "Minha missão é devolver a autonomia e a saúde para mulheres através de uma medicina que realmente escuta."
+                                    </p>
+
+                                    <div className="flex gap-12 items-start py-8 border-y border-brand-100">
+                                        <div>
+                                            <h4 className="text-brand-900 font-bold text-sm uppercase tracking-widest mb-3">Formação</h4>
+                                            <p className="text-base">Mestra em Medicina (Espírito Santo)</p>
+                                            <p className="text-base">Especialista em Clínica Médica e Nutrologia</p>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-brand-900 font-bold text-sm uppercase tracking-widest mb-3">Atendimento</h4>
+                                            <p className="text-base">Residência em São Paulo</p>
+                                            <p className="text-base">Foco em Nutrologia Feminina</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <p>
+                                            Mestre em medicina e formada em 2015, construí minha trajetória após anos de atuação em prontos-socorros e UTIs, ambientes que moldaram meu olhar clínico e minha agilidade diagnóstica.
+                                        </p>
+                                        <p>
+                                            Hoje, dedico minha carreira à <strong>Nutrologia e ao emagrecimento saudável</strong>, unindo ciência rigorosa com a proximidade necessária para transformar a vida de minhas pacientes de forma sustentável.
+                                        </p>
+                                    </div>
+
+                                    <div className="pt-6">
+                                        <span className="text-4xl font-serif italic text-brand-900/40 select-none">Ananda Paris</span>
+                                    </div>
+                                </div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
@@ -628,7 +814,7 @@ const App = () => {
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-                                <a href="https://wa.me/5511999488449" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !px-12 !py-5 text-xl w-full sm:w-auto">
+                                <a href="https://wa.me/5511999488449?text=Ol%C3%A1%20Dra.%20Ananda%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener noreferrer" className="btn-primary !bg-white !text-brand-900 hover:!bg-brand-50 !py-12 !px-12 text-xl w-full sm:w-auto">
                                     <MessageSquare className="mr-3 w-6 h-6" />
                                     Agendar Agora
                                 </a>
@@ -690,7 +876,7 @@ const App = () => {
                     {/* Branding Area */}
                     <div className="max-w-2xl mx-auto mb-16">
                         <span className="text-4xl font-serif text-brand-900 mb-6 block italic">Dra. Ananda Paris</span>
-                        <p className="text-gray-500 text-sm leading-relaxed px-4">
+                        <p className="text-brand-900/50 text-sm leading-relaxed px-4">
                             Medicina humanizada com foco em nutrologia, emagrecimento e longevidade saudável para mulheres que buscam sua melhor versão.
                         </p>
                     </div>
@@ -711,14 +897,14 @@ const App = () => {
                     <div className="pt-12 border-t border-brand-200/40 max-w-4xl mx-auto">
                         <div className="mb-8">
                             <p className="text-brand-900 font-bold tracking-[0.2em] text-[9px] uppercase mb-4 opacity-60">Registro Profissional</p>
-                            <p className="text-gray-600 text-[11px] font-serif italic">CRM-SP 187387 | RQE 116808</p>
+                            <p className="text-brand-900/60 text-[11px] font-serif italic">CRM-SP 187387 | RQE 116808</p>
                         </div>
 
-                        <p className="text-[10px] text-gray-400 leading-relaxed font-light mb-10 max-w-2xl mx-auto italic">
+                        <p className="text-[10px] text-brand-900/60 leading-relaxed font-light mb-10 max-w-2xl mx-auto italic">
                             Publicação de caráter acadêmico em conformidade com o despacho 143/2019 do Conselho Federal de Medicina, Art. 75. Os resultados apresentados podem variar conforme as características individuais de cada paciente. Não garantimos resultados. Cada conduta é individual e baseada em critérios clínicos.
                         </p>
 
-                        <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-[9px] text-gray-500 uppercase tracking-[0.4em] font-medium">
+                        <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-[9px] text-brand-900/40 uppercase tracking-[0.4em] font-medium">
                             <span>© 2026 Todos os direitos reservados</span>
                             <span className="hidden md:block opacity-30">•</span>
                             <span>Studio Cactus</span>
